@@ -6,18 +6,9 @@
 #include <stack>
 #include <string>
 
+#include "callback.h"
+
 using namespace std;
-
-struct TCallback;
-
-typedef int (*t_callback) (const TCallback&, void*);
-
-struct TCallback {
-    const Uint32 id;
-    const string name;
-
-    t_callback cb;
-};
 
 class GameLoop {
     private:
@@ -36,6 +27,8 @@ class GameLoop {
         void update();
         void render();
 
+        TCallbackHandler cb_handler;
+
     public:
         GameLoop();
         ~GameLoop();
@@ -43,9 +36,7 @@ class GameLoop {
         int start();
         void stop();
 
-        void setData(void *data);
-        int registerCallback(string name, t_callback cb);
-        bool removeCallback(Uint32 id);
+        TCallbackHandler* getHandler();
 };
 
 

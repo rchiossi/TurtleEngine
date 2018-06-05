@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "callback.h"
 #include "mainloop.h"
 
 using namespace std;
@@ -17,8 +18,12 @@ int test_cb(const TCallback& cb, void* data) {
     count++;
 
     if (count >= 50) {
-        gdata->gameloop->removeCallback(cb.id);
+        TCallbackHandler* handler = gdata->gameloop->getHandler();
+        handler->removeCallback(cb.id);
         cout << "Callback removed" << endl;
+
+        gdata->gameloop->stop();
+        cout << "Program Stopped" << endl;
     }
 
 
@@ -31,8 +36,10 @@ int main(int argc, char* argv[]) {
     GameData data;
     data.gameloop = gameloop;
 
-    gameloop->setData(&data);
-    gameloop->registerCallback("Test Callback", test_cb);
+    TCallbackHandler* handler = gameloop->getHandler();
+
+    handler->setData(&data);
+    handler->registerCallback("Test Callback", test_cb);
 
     gameloop->start();
 
