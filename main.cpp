@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include <GL/glew.h>
+
 #include "callback.h"
 #include "graphics.h"
 #include "mainloop.h"
@@ -8,6 +10,7 @@ using namespace std;
 
 struct GameData {
     GameLoop* gameloop;
+    GameGraphics* graphics;
 };
 
 int test_cb(const TCallback& cb, void* data) {
@@ -31,12 +34,23 @@ int test_cb(const TCallback& cb, void* data) {
     return 0;
 }
 
+int clear_cb(const TCallback& cb, void* data) {
+    GameData* gdata = static_cast<GameData*>(data);
+
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	SDL_GL_SwapWindow(gdata->graphics->getWindow());
+
+    return 0;
+}
+
 int main(int argc, char* argv[]) {
     GameLoop* gameloop = new GameLoop();
     GameGraphics* graphics = new GameGraphics();
 
     GameData data;
     data.gameloop = gameloop;
+    data.graphics = graphics;
 
     TCallbackHandler* handler = gameloop->getHandler();
 
@@ -46,6 +60,10 @@ int main(int argc, char* argv[]) {
     graphics->setProgramName("TestProgram");
     graphics->setWindowDimension(640, 480);
     graphics->init();
+
+    handler = graphics->getHandler();
+    handler->setData(&data);
+    handler->registerCallback("Clear Callback", CB_ONE_SHOT, clear_cb);
 
     gameloop->setGraphics(graphics);
 

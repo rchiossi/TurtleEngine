@@ -34,6 +34,9 @@ class GameGraphics {
 
         TCallbackHandler* getHandler();
 
+        SDL_Window* getWindow();
+        SDL_GLContext getContext();
+
         void render();
 };
 

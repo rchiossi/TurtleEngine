@@ -80,3 +80,10 @@ void GameGraphics::render() {
     this->cb_handler.run();
 }
 
+SDL_Window* GameGraphics::getWindow() {
+    return this->window;
+}
+
+SDL_GLContext GameGraphics::getContext() {
+    return this->context;
+}
