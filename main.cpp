@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
     TCallbackHandler* handler = gameloop->getHandler();
 
     handler->setData(&data);
-    handler->registerCallback("Test Callback", test_cb);
+    handler->registerCallback("Test Callback", CB_PERSISTENT, test_cb);
 
     graphics->setProgramName("TestProgram");
     graphics->setWindowDimension(640, 480);
