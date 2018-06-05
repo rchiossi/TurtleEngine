@@ -2,6 +2,22 @@
 #define __E_MAINLOOP
 
 #include <SDL2/SDL.h>
+#include <list>
+#include <stack>
+#include <string>
+
+using namespace std;
+
+struct TCallback;
+
+typedef int (*t_callback) (const TCallback&, void*);
+
+struct TCallback {
+    const Uint32 id;
+    const string name;
+
+    t_callback cb;
+};
 
 class GameLoop {
     private:
@@ -10,6 +26,11 @@ class GameLoop {
         Uint32 maxfps = 250;
 
         bool running = false;
+
+        void* cb_data;
+        list<TCallback> callbacks;
+        stack<list<TCallback>::iterator> pending_remove;
+        Uint32 last_cb_id = 0;
 
         int loop();
         void update();
@@ -20,7 +41,11 @@ class GameLoop {
         ~GameLoop();
 
         int start();
+        void stop();
 
+        void setData(void *data);
+        int registerCallback(string name, t_callback cb);
+        bool removeCallback(Uint32 id);
 };
 
 
