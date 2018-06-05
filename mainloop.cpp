@@ -90,9 +90,19 @@ void GameLoop::update() {
 }
 
 void GameLoop::render() {
+    if (this->graphics == NULL) {
+        cout << "Error: Game Graphics not initialized" << endl;
+        return;
+    }
+
+    this->graphics->render();
 }
 
 TCallbackHandler* GameLoop::getHandler() {
     return &this->cb_handler;
+}
+
+void GameLoop::setGraphics(GameGraphics *graphics) {
+    this->graphics = graphics;
 }
 

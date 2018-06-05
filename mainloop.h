@@ -7,6 +7,7 @@
 #include <string>
 
 #include "callback.h"
+#include "graphics.h"
 
 using namespace std;
 
@@ -23,6 +24,8 @@ class GameLoop {
         stack<list<TCallback>::iterator> pending_remove;
         Uint32 last_cb_id = 0;
 
+        GameGraphics* graphics;
+
         int loop();
         void update();
         void render();
@@ -37,6 +40,8 @@ class GameLoop {
         void stop();
 
         TCallbackHandler* getHandler();
+
+        void setGraphics(GameGraphics* graphics);
 };
 
 
