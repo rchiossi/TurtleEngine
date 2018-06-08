@@ -3,12 +3,18 @@
 #include <iostream>
 #include <string>
 
+//#define GL3_PROTOTYPES 1
+#include <GL/glew.h>
+
 using namespace std;
 
 GameGraphics::GameGraphics() {
 }
 
 GameGraphics::~GameGraphics() {
+    if (this->activeScene != NULL) {
+        this->activeScene->unload();
+    }
 }
 
 void printSDLError() {
@@ -36,6 +42,11 @@ int GameGraphics::init() {
 		return -1;
 	}
 
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
     this->context = SDL_GL_CreateContext(this->window);
     if (this->context == NULL) {
         cout << "Error creating OpenGL context" << endl;
@@ -43,10 +54,7 @@ int GameGraphics::init() {
         return -1;
     }
 
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    glewInit();
 
     return 0;
 }
@@ -77,7 +85,17 @@ TCallbackHandler* GameGraphics::getHandler() {
 }
 
 void GameGraphics::render() {
-    this->cb_handler.run();
+    //this->cb_handler.run();
+
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+    if (this->activeScene != NULL) {
+        this->activeScene->render();
+    }
+
+	SDL_GL_SwapWindow(this->window);
+
 }
 
 SDL_Window* GameGraphics::getWindow() {
@@ -87,3 +105,14 @@ SDL_Window* GameGraphics::getWindow() {
 SDL_GLContext GameGraphics::getContext() {
     return this->context;
 }
+
+void GameGraphics::loadScene(GameScene* scene) {
+    if (this->activeScene != NULL) {
+        this->activeScene->unload();
+    }
+
+    this->activeScene = scene;
+
+    this->activeScene->load();
+}
+

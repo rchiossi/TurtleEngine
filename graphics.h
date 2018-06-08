@@ -8,6 +8,7 @@
 #include <SDL2/SDL.h>
 
 #include "callback.h"
+#include "scene.h"
 
 using namespace std;
 
@@ -23,6 +24,8 @@ class GameGraphics {
 
         TCallbackHandler cb_handler;
 
+        GameScene* activeScene;
+
     public:
         GameGraphics();
         ~GameGraphics();
@@ -36,6 +39,8 @@ class GameGraphics {
 
         SDL_Window* getWindow();
         SDL_GLContext getContext();
+
+        void loadScene(GameScene* scene);
 
         void render();
 };
