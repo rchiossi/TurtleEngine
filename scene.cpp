@@ -10,10 +10,16 @@ void GameScene::addGameObject(GameObject obj) {
     this->objects.push_back(obj);
 }
 
+void GameScene::addShader(GameShader shader) {
+    handler.addShader(shader);
+}
+
 void GameScene::load() {
     for (GameObject& obj : this->objects) {
         obj.load();
     }
+
+    this->handler.enable();
 }
 
 void GameScene::unload() {

@@ -5,6 +5,7 @@
 #include "callback.h"
 #include "graphics.h"
 #include "mainloop.h"
+#include "shader.h"
 
 using namespace std;
 
@@ -108,8 +109,26 @@ int main(int argc, char* argv[]) {
     */
 
     GameScene scene;
+
     GameObject* obj = new GameObject({1,1}, {0,0});
     scene.addGameObject(*obj);
+
+    GameShader vertex_shader("vertex.glsl", GL_VERTEX_SHADER);
+    GameShader fragment_shader("fragment.glsl", GL_FRAGMENT_SHADER);
+
+    int err = vertex_shader.load();
+    if (err != 0)
+        cout << "Error loading shader" << endl;
+    vertex_shader.check();
+
+    err = fragment_shader.load();
+    if (err != 0)
+        cout << "Error loading shader" << endl;
+    fragment_shader.check();
+
+    scene.addShader(vertex_shader);
+    scene.addShader(fragment_shader);
+
     graphics->loadScene(&scene);
 
     gameloop->setGraphics(graphics);

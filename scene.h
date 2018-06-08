@@ -4,12 +4,14 @@
 #include <list>
 
 #include "object.h"
+#include "shader.h"
 
 using namespace std;
 
 class GameScene {
     private:
         list<GameObject> objects;
+        ShaderHandler handler;
 
     public:
         GameScene();
@@ -21,7 +23,7 @@ class GameScene {
         void render();
 
         void addGameObject(GameObject obj);
-
+        void addShader(GameShader shader);
 };
 
 #endif

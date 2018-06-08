@@ -56,6 +56,9 @@ int GameGraphics::init() {
 
     glewInit();
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     return 0;
 }
 
@@ -86,7 +89,6 @@ TCallbackHandler* GameGraphics::getHandler() {
 
 void GameGraphics::render() {
     //this->cb_handler.run();
-
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
